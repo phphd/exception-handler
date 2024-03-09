@@ -1,0 +1,9 @@
+services:
+    PhPhD\ExceptionHandlerBundle\Tests\Integration\Stub\MessageHandlerStub:
+        autoconfigure: true
+
+    PhPhD\ExceptionHandlerBundle\Tests\Integration\Stub\LogExceptionMessageHandlerStub:
+        autoconfigure: true
+
+    PhPhD\ExceptionHandlerBundle\Tests\Integration\Bootstrap\Middleware\ThrowOriginExceptionMiddleware:
+        autoconfigure: true

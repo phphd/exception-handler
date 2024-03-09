@@ -1,0 +1,70 @@
+{
+    "name": "phphd/exception-handler-bundle",
+    "description": "Message Bus Exception Handler",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yevhen Sidelnyk",
+            "email": "zsidelnik@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=8.1",
+        "symfony/dependency-injection": "^6.0 | ^7.0",
+        "symfony/http-kernel": "^6.0 | ^7.0",
+        "symfony/messenger": "^6.2 | ^7.0",
+        "symfony/string": "^6.0 | ^7.0"
+    },
+    "require-dev": {
+        "tomasvotruba/type-coverage": "^0.2.3",
+        "phpstan/phpstan": "^1.10.60",
+        "vimeo/psalm": "^5.23.1",
+        "phpat/phpat": "^0.10.15",
+        "phpstan/phpstan-phpunit": "^1.3.16",
+        "psalm/plugin-phpunit": "^0.18.4",
+        "nyholm/symfony-bundle-test": "^3.0",
+        "phphd/coding-standard": "~0.5.0",
+        "phpunit/phpunit": "^10.5.13"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/phphd/coding-standard"
+        }
+    ],
+    "autoload": {
+        "classmap": [
+            "DependencyInjection",
+            "PhdExceptionHandlerBundle.php"
+        ],
+        "psr-4": {
+            "PhPhD\\ExceptionHandler\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PhPhD\\ExceptionHandlerBundle\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "ci:pack": [
+            "@ci:ecs",
+            "@ci:rector",
+            "@ci:phpstan",
+            "@ci:psalm",
+            "@ci:unit-test",
+            "@ci:integration-test"
+        ],
+        "ci:ecs": "vendor/bin/ecs check",
+        "ci:ecs-fix": "vendor/bin/ecs check --fix",
+        "ci:rector": "vendor/bin/rector process --dry-run -vv",
+        "ci:rector-fix": "vendor/bin/rector process",
+        "ci:phpstan": "vendor/bin/phpstan analyze ./",
+        "ci:psalm": "vendor/bin/psalm",
+        "ci:test": "vendor/bin/phpunit --testdox --colors=always",
+        "ci:unit-test": "vendor/bin/phpunit --testdox --colors=always --testsuite=Unit",
+        "ci:integration-test": "vendor/bin/phpunit --testdox --colors=always --testsuite=Integration"
+    }
+}
