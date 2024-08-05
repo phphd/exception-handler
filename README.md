@@ -40,10 +40,10 @@ framework:
                     - doctrine_transaction
 ```
 
-The core principle of exception handling revolves around the idea of exceptions being dispatched to their corresponding
-bus, therefore each message bus must define respective exception bus.
+The core principle of exception handling revolves around the idea that exceptions are dispatched to the corresponding
+bus to be handled. There must be one exception bus per one origin bus.
 
-The exception bus name convention is straightforward:`command.bus` exceptions are forwarded
+The exception bus name convention is straightforward: `command.bus` exceptions are forwarded
 into `command.exception.bus`.
 
 ```yaml
@@ -66,7 +66,8 @@ Currently, there are few exception handling middlewares provided.
 
 Middleware: `phd_exception_rethrow_unhandled`
 
-In case if dispatched exception had not been handled it is rethrown back.
+In case if dispatched exception had not been handled it is rethrown back. The exception is considered as handled if
+handler returns a response, or throws another exception.
 
 ### Exception chaining
 
@@ -87,7 +88,9 @@ Filters out all null results of exception handlers.
 The simplest use-case is defining `#[RaiseAs]` attribute on your exception class:
 
 ```php
-#[RaiseAs(AccessDeniedHttpException::class, bus: 'command.exception.bus')]
+use PhPhD\ExceptionHandler\Chain\Escalator\RaiseAs;
+
+#[RaiseAs(AccessDeniedHttpException::class, bus: 'api.exception.bus')]
 final class NonWhiteListedUserException extends DomainException
 {
 }
@@ -97,27 +100,29 @@ In this example, any time `NonWhiteListedUserException` is thrown from an underl
 it will be raised as `AccessDeniedHttpException`.
 
 As you can see, there's required attribute bus option. Since some exceptions could be thrown from multiple different
-scenarios (hence, different buses), it is required to explicitly specify the bus from which the particular exception
+contexts (hence, different buses), it is required to explicitly specify the bus from which the particular exception
 must be raised, so that in other scenarios another exceptions could be escalated:
 
 ```php
-#[RaiseAs(ImportLockedHttpException::class, bus: 'query.exception.bus')]
+use PhPhD\ExceptionHandler\Chain\Escalator\RaiseAs;
+
+#[RaiseAs(ImportLockedHttpException::class, bus: 'api.exception.bus')]
 #[RaiseAs(RecoverableMessageHandlingException::class, bus: 'consumer.exception.bus')]
 final class ImportLockedException extends RuntimeException
 {
 }
 ```
 
-In previous example, `ImportLockedException` could be thrown either in http context (`query.bus`), or in the consumer
+In this example, `ImportLockedException` could be thrown either in http context (`api.bus`), or in the mq consumer
 context (`consumer.bus`). Therefore, raised exceptions are different.
 
 ### Manual Handling
 
 The exception is dispatched down to your custom handlers, where you could either return a Response, throw a new
-exception, or just return `null` so that exception will be thrown again.
+exception, or just log it and return `null` so that exception will be re-thrown again.
 
 ```php
-#[AsMessageHandler('command.exception.bus')]
+#[AsMessageHandler('api.exception.bus')]
 final readonly class InventoryExceptionHandler
 {
     /** @throws Throwable */
@@ -140,18 +145,12 @@ final readonly class InventoryExceptionHandler
 }
 ```
 
-If you would like to use the same exception handler for multiple exception buses, you can do so using following more
-verbose message handler registration syntax:
+If you would like to use the same exception handler for multiple exception buses, you can do so by adding multiple
+`#[AsMessageHandler]` attributes:
 
 ```php
-#[AutoconfigureTag('messenger.message_handler', [
-    'handles' => InventoryDomainException::class, 
-    'bus' => 'command.exception.bus',
-])]
-#[AutoconfigureTag('messenger.message_handler', [
-    'handles' => InventoryDomainException::class, 
-    'bus' => 'query.exception.bus'
-])]
+#[AsMessageHandler(bus: 'command.exception.bus')]
+#[AsMessageHandler(bus: 'query.exception.bus')]
 final readonly class InventoryExceptionHandler
 {
     // ...

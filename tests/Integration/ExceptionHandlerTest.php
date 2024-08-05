@@ -17,8 +17,8 @@ use Throwable;
  * @covers \PhPhD\ExceptionHandlerBundle\PhdExceptionHandlerBundle
  * @covers \PhPhD\ExceptionHandlerBundle\DependencyInjection\PhdExceptionHandlerExtension
  * @covers \PhPhD\ExceptionHandler\ExceptionHandlerMiddleware
- * @covers \PhPhD\ExceptionHandler\Chain\Elevator\RaiseAs
- * @covers \PhPhD\ExceptionHandler\Chain\Elevator\RaiseAsExceptionElevator
+ * @covers \PhPhD\ExceptionHandler\Chain\Escalator\RaiseAs
+ * @covers \PhPhD\ExceptionHandler\Chain\Escalator\RaiseAsExceptionEscalator
  * @covers \PhPhD\ExceptionHandler\Rethrow\RethrowUnhandledExceptionMiddleware
  *
  * @internal

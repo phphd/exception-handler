@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace PhPhD\ExceptionHandler\Chain\Elevator;
+namespace PhPhD\ExceptionHandler\Chain\Escalator;
 
 use ReflectionAttribute;
 use ReflectionClass;
 use Throwable;
 
 /** @internal */
-final class RaiseAsExceptionElevator
+final class RaiseAsExceptionEscalator
 {
     /** @throws Throwable */
     public function raiseException(Throwable $exception, string $busName): void

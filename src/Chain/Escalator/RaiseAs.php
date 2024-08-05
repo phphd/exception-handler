@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhPhD\ExceptionHandler\Chain\Elevator;
+namespace PhPhD\ExceptionHandler\Chain\Escalator;
 
 use Attribute;
 use Throwable;

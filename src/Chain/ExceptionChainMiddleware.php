@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhPhD\ExceptionHandler\Chain;
 
 use LogicException;
-use PhPhD\ExceptionHandler\Chain\Elevator\RaiseAsExceptionElevator;
+use PhPhD\ExceptionHandler\Chain\Escalator\RaiseAsExceptionEscalator;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Middleware\MiddlewareInterface;
 use Symfony\Component\Messenger\Middleware\StackInterface;
@@ -20,11 +20,11 @@ use Throwable;
  */
 final class ExceptionChainMiddleware implements MiddlewareInterface
 {
-    private readonly RaiseAsExceptionElevator $elevator;
+    private readonly RaiseAsExceptionEscalator $escalator;
 
     public function __construct()
     {
-        $this->elevator = new RaiseAsExceptionElevator();
+        $this->escalator = new RaiseAsExceptionEscalator();
     }
 
     /** @throws Throwable */
@@ -38,7 +38,7 @@ final class ExceptionChainMiddleware implements MiddlewareInterface
         $handledStamp = $resultEnvelope->last(HandledStamp::class);
 
         if (null === $handledStamp) {
-            $this->elevator->raiseException($exception, $busName);
+            $this->escalator->raiseException($exception, $busName);
         }
 
         return $resultEnvelope;
