@@ -1,4 +1,4 @@
-# PhdExceptionHandlerBundle
+# Exception Handler
 
 🧰 PHP Exception Handler built on top of [Symfony Messenger](https://symfony.com/doc/current/messenger.html) component. 
 Provides middlewares that allow you to easily re-raise exceptions, chain them, or handle with a dedicated handler.

@@ -22,6 +22,7 @@
             <directory>src</directory>
         </include>
         <exclude>
+            <directory>src/*/Tests</directory>
             <directory>src/*/*/Tests</directory>
             <directory>src/*/*/*/Tests</directory>
             <directory>src/*/*/*/*/Tests</directory>
