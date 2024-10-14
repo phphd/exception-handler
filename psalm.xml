@@ -9,10 +9,9 @@
         findUnusedCode="true"
 >
     <projectFiles>
-        <directory name="./"/>
+        <directory name="src"/>
         <ignoreFiles>
             <directory name="vendor"/>
-            <file name="rector.php"/>
         </ignoreFiles>
     </projectFiles>
     <plugins>

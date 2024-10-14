@@ -1,0 +1,3 @@
+services:
+    phd_exception_chaining:
+        class: PhPhD\ExceptionHandler\Middleware\Chain\ExceptionChainMiddleware

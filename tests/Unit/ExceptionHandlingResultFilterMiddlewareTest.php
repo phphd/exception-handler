@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PhPhD\ExceptionHandlerBundle\Tests\Unit;
+namespace PhPhD\ExceptionHandler\Bundle\Tests\Unit;
 
-use PhPhD\ExceptionHandler\Result\ExceptionHandlingResultFilterMiddleware;
+use PhPhD\ExceptionHandler\Middleware\Result\ExceptionHandlerResultFilterMiddleware;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -14,7 +14,7 @@ use Symfony\Component\Messenger\Middleware\MiddlewareInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 
 /**
- * @covers \PhPhD\ExceptionHandler\Result\ExceptionHandlingResultFilterMiddleware
+ * @covers \PhPhD\ExceptionHandler\Middleware\Result\ExceptionHandlerResultFilterMiddleware
  *
  * @internal
  */
@@ -30,7 +30,7 @@ final class ExceptionHandlingResultFilterMiddlewareTest extends TestCase
 
         $this->nextMiddleware = $this->createMock(MiddlewareInterface::class);
 
-        $this->messageBus = new MessageBus([new ExceptionHandlingResultFilterMiddleware(), $this->nextMiddleware]);
+        $this->messageBus = new MessageBus([new ExceptionHandlerResultFilterMiddleware(), $this->nextMiddleware]);
     }
 
     public function testPassesMessageThrough(): void

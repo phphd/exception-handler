@@ -1,0 +1,3 @@
+services:
+    phd_exception_rethrow_unhandled:
+        class: PhPhD\ExceptionHandler\Middleware\Rethrow\RethrowUnhandledExceptionMiddleware

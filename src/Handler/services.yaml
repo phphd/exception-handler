@@ -1,0 +1,10 @@
+services:
+    phd_exception_handler:
+        class: PhPhD\ExceptionHandler\Handler\ExceptionHandlerMiddleware
+        arguments:
+            - '@phd_exception_handler.bus'
+
+    phd_exception_handler.bus:
+        class: Symfony\Component\Messenger\RoutableMessageBus
+        arguments:
+            - !tagged_locator { tag: 'messenger.bus', index_by: 'id' }
