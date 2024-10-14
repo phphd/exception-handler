@@ -17,6 +17,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->skip([
         LocallyCalledStaticMethodToNonStaticRector::class => [
             __DIR__.'/tests',
+            __DIR__.'/src/*/Tests/*.php',
         ],
     ]);
 };

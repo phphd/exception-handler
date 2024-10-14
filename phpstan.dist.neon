@@ -8,16 +8,17 @@ parameters:
     level: 9
     phpVersion: 80213
     editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
+    paths:
+        - src
+        - tests
     excludePaths:
         analyseAndScan:
-            - vendor
             - tests/*/Stub/*
-            - rector.php
-            - ecs.php
     type_coverage:
         return_type: 100
         param_type: 100
         property_type: 100
+        constant: 0
     fileExtensions:
         - 'php'
     phpat:

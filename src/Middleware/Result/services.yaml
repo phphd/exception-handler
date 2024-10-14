@@ -1,0 +1,3 @@
+services:
+    phd_exception_result_filter:
+        class: PhPhD\ExceptionHandler\Middleware\Result\ExceptionHandlerResultFilterMiddleware

@@ -1,27 +1,27 @@
 # PhdExceptionHandlerBundle
 
-🧰 Provides [Symfony Messenger](https://symfony.com/doc/current/messenger.html) middlewares tailored for exception
-handling. You can easily re-raise exceptions, chain them, or handle with a dedicated bus.
+🧰 PHP Exception Handler built on top of [Symfony Messenger](https://symfony.com/doc/current/messenger.html) component. 
+Provides middlewares that allow you to easily re-raise exceptions, chain them, or handle with a dedicated handler.
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/phphd/exception-handler-bundle/ci.yaml?branch=main)](https://github.com/phphd/exception-handler-bundle/actions?query=branch%3Amain)
-[![Codecov](https://codecov.io/gh/phphd/exception-handler-bundle/graph/badge.svg?token=GZRXWYT55Z)](https://codecov.io/gh/phphd/exception-handler-bundle)
-[![Psalm coverage](https://shepherd.dev/github/phphd/exception-handler-bundle/coverage.svg)](https://shepherd.dev/github/phphd/exception-handler-bundle)
-[![Psalm level](https://shepherd.dev/github/phphd/exception-handler-bundle/level.svg)](https://shepherd.dev/github/phphd/exception-handler-bundle)
-[![Packagist Downloads](https://img.shields.io/packagist/dt/phphd/exception-handler-bundle.svg)](https://packagist.org/packages/phphd/exception-handler-bundle)
-[![Licence](https://img.shields.io/github/license/phphd/exception-handler-bundle.svg)](https://github.com/phphd/exception-handler-bundle/blob/main/LICENSE)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/phphd/exception-handler/ci.yaml?branch=main)](https://github.com/phphd/exception-handler/actions?query=branch%3Amain)
+[![Codecov](https://codecov.io/gh/phphd/exception-handler/graph/badge.svg?token=GZRXWYT55Z)](https://codecov.io/gh/phphd/exception-handler)
+[![Psalm coverage](https://shepherd.dev/github/phphd/exception-handler/coverage.svg)](https://shepherd.dev/github/phphd/exception-handler)
+[![Psalm level](https://shepherd.dev/github/phphd/exception-handler/level.svg)](https://shepherd.dev/github/phphd/exception-handler)
+[![Packagist Downloads](https://img.shields.io/packagist/dt/phphd/exception-handler.svg)](https://packagist.org/packages/phphd/exception-handler)
+[![Licence](https://img.shields.io/github/license/phphd/exception-handler.svg)](https://github.com/phphd/exception-handler/blob/main/LICENSE)
 
 ## Installation 📥
 
 1. Install via composer
 
     ```sh
-    composer require phphd/exception-handler-bundle
+    composer require phphd/exception-handler
     ```
 
 2. Enable the bundle in the `bundles.php`
 
     ```php
-    PhPhD\ExceptionHandlerBundle\PhdExceptionHandlerBundle::class => ['all' => true],
+    PhPhD\ExceptionHandler\Bundle\PhdExceptionHandlerBundle::class => ['all' => true],
     ```
 
 ## Configuration ⚒️
@@ -88,7 +88,7 @@ Filters out all null results of exception handlers.
 The simplest use-case is defining `#[RaiseAs]` attribute on your exception class:
 
 ```php
-use PhPhD\ExceptionHandler\Chain\Escalator\RaiseAs;
+use PhPhD\ExceptionHandler\Middleware\Chain\Escalator\RaiseAs;
 
 #[RaiseAs(AccessDeniedHttpException::class, bus: 'api.exception.bus')]
 final class NonWhiteListedUserException extends DomainException
@@ -104,7 +104,7 @@ contexts (hence, different buses), it is required to explicitly specify the bus 
 must be raised, so that in other scenarios another exceptions could be escalated:
 
 ```php
-use PhPhD\ExceptionHandler\Chain\Escalator\RaiseAs;
+use PhPhD\ExceptionHandler\Middleware\Chain\Escalator\RaiseAs;
 
 #[RaiseAs(ImportLockedHttpException::class, bus: 'api.exception.bus')]
 #[RaiseAs(RecoverableMessageHandlingException::class, bus: 'consumer.exception.bus')]

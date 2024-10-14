@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PhPhD\ExceptionHandlerBundle\Tests\Unit;
+namespace PhPhD\ExceptionHandler\Bundle\Tests\Unit;
 
 use LogicException;
-use PhPhD\ExceptionHandler\ExceptionHandlerMiddleware;
+use PhPhD\ExceptionHandler\Handler\ExceptionHandlerMiddleware;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -17,7 +17,7 @@ use Symfony\Component\Messenger\Middleware\StackMiddleware;
 use Symfony\Component\Messenger\Stamp\BusNameStamp;
 
 /**
- * @covers \PhPhD\ExceptionHandler\ExceptionHandlerMiddleware
+ * @covers \PhPhD\ExceptionHandler\Handler\ExceptionHandlerMiddleware
  *
  * @internal
  */
