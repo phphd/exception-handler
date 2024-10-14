@@ -8,11 +8,13 @@ use LogicException;
 use PhPhD\ExceptionHandler\ExceptionHandlerMiddleware;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use stdClass;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBus;
 use Symfony\Component\Messenger\Middleware\MiddlewareInterface;
 use Symfony\Component\Messenger\Middleware\StackMiddleware;
+use Symfony\Component\Messenger\Stamp\BusNameStamp;
 
 /**
  * @covers \PhPhD\ExceptionHandler\ExceptionHandlerMiddleware
@@ -44,5 +46,18 @@ final class ExceptionHandlerMiddlewareTest extends TestCase
         $this->expectException(LogicException::class);
 
         $this->middleware->handle($envelope, $this->stack);
+    }
+
+    public function testOriginalEnvelopeStampsArePreserved(): void
+    {
+        $this->nextMiddleware->method('handle')->willThrowException(new RuntimeException());
+
+        $envelope = Envelope::wrap(new stdClass(), [new BusNameStamp('command.bus')]);
+
+        $resultEnvelope = $this->middleware->handle($envelope, $this->stack);
+
+        $busNameStamp = $resultEnvelope->last(BusNameStamp::class);
+        self::assertInstanceOf(BusNameStamp::class, $busNameStamp);
+        self::assertSame('command.bus', $busNameStamp->getBusName());
     }
 }
