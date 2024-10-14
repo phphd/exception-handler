@@ -11,6 +11,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Middleware\MiddlewareInterface;
 use Symfony\Component\Messenger\Middleware\StackInterface;
 use Symfony\Component\Messenger\Stamp\BusNameStamp;
+use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Messenger\Stamp\HandlerArgumentsStamp;
 use Symfony\Component\String\ByteString;
 use Throwable;
@@ -33,11 +34,12 @@ final class ExceptionHandlerMiddleware implements MiddlewareInterface
             return $stack->next()->handle($envelope, $stack);
         } catch (Exception $exception) {
             $exceptionBusName = $this->getExceptionBusName($busName);
+            $handledExceptionEnvelope = $this->handleException($exceptionBusName, $exception, $message);
 
-            return $this->exceptionHandlerBus->dispatch(
-                Envelope::wrap($exception, [new BusNameStamp($exceptionBusName)]),
-                [new HandlerArgumentsStamp([$message])],
-            );
+            /** @var list<HandledStamp> $handledExceptionStamps */
+            $handledExceptionStamps = $handledExceptionEnvelope->all(HandledStamp::class);
+
+            return $envelope->with(...$handledExceptionStamps);
         }
     }
 
@@ -55,5 +57,13 @@ final class ExceptionHandlerMiddleware implements MiddlewareInterface
     private function getExceptionBusName(ByteString $busName): string
     {
         return $busName->trimSuffix('.bus')->append('.exception.bus')->toString();
+    }
+
+    private function handleException(string $exceptionBusName, Exception $exception, object $message): Envelope
+    {
+        return $this->exceptionHandlerBus->dispatch(
+            Envelope::wrap($exception, [new BusNameStamp($exceptionBusName)]),
+            [new HandlerArgumentsStamp([$message])],
+        );
     }
 }
